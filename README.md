@@ -65,10 +65,9 @@ compatibility_date = "2024-01-01"
 routes = [
     { pattern = "thelimbostudio.com/api/contact", custom_domain = false }
 ]
-
-[vars]
-RESEND_API_KEY = "re_***"
 ```
+
+**Note**: The `RESEND_API_KEY` is stored as a Cloudflare Worker secret (not in wrangler.toml) for security.
 
 ## 🌐 DNS & Email Configuration
 
@@ -116,7 +115,14 @@ npx wrangler deploy
 ## 🔑 Environment Variables & Secrets
 
 ### Cloudflare Worker
-- `RESEND_API_KEY`: Resend API key (stored in wrangler.toml vars)
+- `RESEND_API_KEY`: Resend API key (stored as Worker secret, not in code)
+
+To set the secret:
+```bash
+cd workers
+npx wrangler secret put RESEND_API_KEY
+# Enter the API key when prompted
+```
 
 ### Local Development
 ```bash

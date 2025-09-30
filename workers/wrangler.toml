@@ -2,6 +2,6 @@ name = "applimbostudio"
 main = "contact-worker.js"
 compatibility_date = "2024-01-01"
 
-send_email = [
-    {name = "SEB", destination_address = "contact@thelimbostudio.com"}
+routes = [
+    { pattern = "thelimbostudio.com/api/contact", custom_domain = false }
 ]
