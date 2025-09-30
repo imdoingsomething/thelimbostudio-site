@@ -57,7 +57,7 @@ h1{font-size:clamp(36px,4.4vw,62px);line-height:1.04;margin:12px 0 18px;font-wei
 /* Responsive auto-fit grids (improved) */
 .hero-list{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   gap:14px;margin-top:12px
 }
 .grid-3{
