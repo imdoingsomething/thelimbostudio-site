@@ -63,7 +63,7 @@ main = "contact-worker.js"
 compatibility_date = "2024-01-01"
 
 routes = [
-    { pattern = "thelimbostudio.com/api/contact", custom_domain = false }
+    { pattern = "thelimbostudio.com/api/*", custom_domain = false }
 ]
 ```
 
