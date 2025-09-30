@@ -1,84 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Limbo Studio - AI Business Consultancy</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Limbo Studio — Bespoke AI Consultancy</title>
+  <meta name="description" content="The Limbo Studio delivers bespoke AI solutions — assessments, system architectures, and end‑to‑end implementations that make AI practical and profitable." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>The Limbo Studio</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header class="top">
+    <div class="wrap nav">
+      <a href="#top" class="brand" aria-label="The Limbo Studio">
+        <img class="logo-img" src="/assets/logo.png" alt="The Limbo Studio logo" />
+        <span>THE LIMBO ST<span style="letter-spacing:0">U</span>DIO<br><small>Bespoke AI Consultancy</small></span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#results">Results</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="nav-cta">Book a Consult</a>
+      </nav>
+      <button class="burger" id="burger" aria-label="Open menu"><span></span></button>
+    </div>
+  </header>
 
-    <main>
-        <section id="home" class="hero">
-            <div class="hero-content">
-                <h1>AI-Powered Business Solutions</h1>
-                <p>Bespoke AI consultancy services tailored to enhance your systems and processes</p>
-                <a href="#contact" class="cta-button">Get Started</a>
-            </div>
-        </section>
-
-        <section id="services" class="services">
-            <div class="container">
-                <h2>Our Services</h2>
-                <div class="service-grid">
-                    <div class="service-card">
-                        <h3>AI Strategy Consulting</h3>
-                        <p>Develop comprehensive AI strategies aligned with your business objectives</p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Process Automation</h3>
-                        <p>Streamline operations with intelligent automation solutions</p>
-                    </div>
-                    <div class="service-card">
-                        <h3>Custom AI Solutions</h3>
-                        <p>Bespoke AI work products tailored to your unique requirements</p>
-                    </div>
-                    <div class="service-card">
-                        <h3>System Integration</h3>
-                        <p>Seamlessly integrate AI capabilities into existing workflows</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="about">
-            <div class="container">
-                <h2>About The Limbo Studio</h2>
-                <p>We specialize in providing businesses with cutting-edge AI solutions that transform operations and drive growth. Our team of experts works closely with clients to deliver tailored AI work products that enhance systems and optimize processes.</p>
-            </div>
-        </section>
-
-        <section id="contact" class="contact">
-            <div class="container">
-                <h2>Contact Us</h2>
-                <p>Ready to transform your business with AI? Get in touch today.</p>
-                <div class="contact-info">
-                    <p>Email: hello@thelimbostudio.com</p>
-                    <p>Let's discuss your AI transformation journey</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 The Limbo Studio. All rights reserved.</p>
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap grid">
+        <div>
+          <div class="eyebrow">From assessment to automation</div>
+          <h1>We design & implement<br/> AI systems that fit <em>your</em> business.</h1>
+          <p class="lead">Strategy → Architecture → Build → Training. We integrate AI where it moves the needle: operations, customer support, analytics, and decision workflows. You get measurable ROI, not just hype.</p>
+          <div class="hero-cta">
+            <a class="btn primary" href="#contact">Get a 20‑min Fit Call</a>
+            <a class="btn" href="#services">See what we deliver</a>
+          </div>
         </div>
-    </footer>
+        <aside>
+          <div class="hero-card">
+            <strong>Quick snapshot</strong>
+            <div class="hero-list">
+              <div class="chip">🔎 <b>AI Readiness</b> audits</div>
+              <div class="chip">🧭 <b>System architecture</b></div>
+              <div class="chip">⚙️ <b>Automation</b> pipelines</div>
+              <div class="chip">🤝 <b>Human‑in‑the‑loop</b> guardrails</div>
+              <div class="chip">📊 <b>Analytics</b> & dashboards</div>
+              <div class="chip">🔐 <b>Privacy & compliance</b></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- Social proof (placeholder text) -->
+    <div class="proof">
+      <div class="wrap">
+        <div class="row">Trusted for pragmatic AI integration • Based in Minnetonka, MN • Serving US clients remotely • Fast pilot timelines</div>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <section id="services">
+      <div class="wrap">
+        <h2 class="section-title">Bespoke services that stack end‑to‑end</h2>
+        <p class="section-lead">We map your processes, identify high‑ROI opportunities, then deliver the architecture and implementation to make AI tangible.</p>
+        <div class="grid-3">
+          <article class="card">
+            <h3>1) Readiness & Roadmap</h3>
+            <p>Stakeholder interviews, workflow mapping, data discovery, risk & compliance checklists, and a prioritized 90‑day plan.</p>
+          </article>
+          <article class="card">
+            <h3>2) Architecture & Prototyping</h3>
+            <p>System blueprints, tool selection, and rapid PoCs: from LLM orchestration to RAG, automations, and agentic flows.</p>
+          </article>
+          <article class="card">
+            <h3>3) Implementation & Training</h3>
+            <p>Secure deployments, dashboards for performance, staff enablement, and iterative optimization for ROI.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section id="process">
+      <div class="wrap">
+        <h2 class="section-title">Our process — fast pilots, measurable outcomes</h2>
+        <p class="section-lead">A clear path from discovery to adoption. Most clients see automation wins in 2–6 weeks depending on scope.</p>
+        <div class="stepper">
+          <div class="step"><div class="num">01</div><h3>Discovery</h3><p>Interviews and process mapping to find quick wins and constraints.</p></div>
+          <div class="step"><div class="num">02</div><h3>Design</h3><p>Architecture, data flow, guardrails, and KPIs; choose tools that fit.</p></div>
+          <div class="step"><div class="num">03</div><h3>Pilot</h3><p>Implement a scoped pilot with HITL safety; validate value with real users.</p></div>
+          <div class="step"><div class="num">04</div><h3>Scale</h3><p>Harden, document, train teams, and expand to adjacent workflows.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results (sample KPIs — tune to real numbers later) -->
+    <section id="results">
+      <div class="wrap">
+        <h2 class="section-title">Outcomes we target</h2>
+        <div class="kpis">
+          <div class="k"><div class="big">30–60%</div><div class="small">Cycle‑time reduction</div></div>
+          <div class="k"><div class="big">10–25×</div><div class="small">Content throughput</div></div>
+          <div class="k"><div class="big">20–40%</div><div class="small">Support deflection</div></div>
+          <div class="k"><div class="big">4–12 wks</div><div class="small">Time to pilot</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About / credibility -->
+    <section id="about">
+      <div class="wrap">
+        <h2 class="section-title">Why The Limbo Studio</h2>
+        <p class="section-lead">We blend creative‑studio roots with disciplined systems thinking. That means solutions your team will actually use — not shelfware demos.</p>
+        <div class="grid-3">
+          <article class="card"><h3>Human‑centered</h3><p>We design for adoption first — clear UX, documentation, and training.</p></article>
+          <article class="card"><h3>Tool‑agnostic</h3><p>We pick the stack that fits your constraints, not ours.</p></article>
+          <article class="card"><h3>Security‑minded</h3><p>Privacy, RBAC, auditability, and vendor risk reviewed up front.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="cta">
+      <div class="wrap">
+        <div class="box">
+          <div>
+            <h2 class="section-title" style="margin:0">Let's scope your first win</h2>
+            <p>Based in Minnetonka, MN. Remote‑first. We'll review your workflows and identify 2–3 high‑ROI automations to pilot.</p>
+          </div>
+          <form id="contactForm" class="card" style="margin:0">
+            <label class="smol" for="name">Name</label>
+            <input id="name" name="name" required placeholder="Your name" />
+            <label class="smol" for="email">Email</label>
+            <input id="email" name="email" type="email" required placeholder="you@company.com" />
+            <label class="smol" for="msg">What are you trying to automate?</label>
+            <textarea id="msg" name="message" rows="4" placeholder="e.g., inbound lead triage, ticket routing, reporting…"></textarea>
+            <button class="btn primary" type="submit">Request a 20‑min call</button>
+            <p class="smol" id="formNote" aria-live="polite" style="margin:8px 0 0; color: var(--muted);"></p>
+            <input type="hidden" name="_target" value="contact@thelimbostudio.com" />
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <div class="brand" style="margin-bottom:10px"><img class="logo-img" src="/assets/logo.png" alt="The Limbo Studio logo" /><span>THE LIMBO STUDIO</span></div>
+        <div class="smol">Bespoke AI Solutions • Minnetonka, MN • (651) 551‑2587 • <a href="mailto:contact@thelimbostudio.com">contact@thelimbostudio.com</a></div>
+        <div class="divider"></div>
+        <div class="smol">© <span id="year"></span> The Limbo Studio. All rights reserved.</div>
+      </div>
+      <div>
+        <div class="smol">Quick links</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+          <a href="#services">Services</a>
+          <a href="#process">Process</a>
+          <a href="#results">Results</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+          <a href="/privacy.html">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/script.js" defer></script>
 </body>
-</html><!-- Updated Mon Sep 29 09:19:26 PM UTC 2025 -->
+</html>
