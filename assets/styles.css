@@ -67,3 +67,36 @@ footer { padding: 40px 0 70px; color: var(--muted); }
 /* Form elements */
 input, textarea { width: 100%; margin: 6px 0 14px; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(142,203,255,.18); background: #0c121c; color: var(--text); outline: none; }
 input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--ring); }
+
+/* Mission band */
+.mission-band {
+  background: linear-gradient(180deg, rgba(17,24,36,.8), rgba(17,24,36,.65));
+  border-top: 1px solid rgba(142,203,255,.12);
+  border-bottom: 1px solid rgba(142,203,255,.12);
+  padding: 40px 0;
+}
+.mission-points {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+.mission-points .point {
+  background: var(--panel);
+  border: 1px solid rgba(142,203,255,.12);
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 600;
+}
+@media (max-width: 960px) {
+  .mission-points { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .mission-points { grid-template-columns: 1fr; }
+}
+
+/* Bulleted lists on company page */
+ul.bullets { padding-left: 1.1rem; margin: 10px 0 18px; }
+ul.bullets li { margin: 6px 0; color: var(--muted); }
