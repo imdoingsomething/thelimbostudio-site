@@ -1,3 +1,5 @@
+import { EmailMessage } from "cloudflare:email";
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -19,30 +21,49 @@ export default {
         return json({ ok: false, error: 'Invalid input' }, 400);
       }
 
-      // --- Send via MailChannels ---
-      const payload = {
-        personalizations: [{ to: [{ email: to, name: 'The Limbo Studio' }] }],
-        from: { email: 'contact@thelimbostudio.com', name: 'Limbo Studio Website' },
-        reply_to: { email, name },
-        subject: `New inquiry from ${name}`,
-        content: [
-          { type: 'text/plain', value: `From: ${name} <${email}>\n\n${message}` },
-          { type: 'text/html', value: `<p><b>From:</b> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p><pre>${escapeHtml(message)}</pre>` }
-        ]
-      };
+      // --- Send via Cloudflare Email Routing ---
+      // Build simple MIME message
+      const boundary = '----boundary' + Date.now();
+      const mimeContent = [
+        `From: Limbo Studio Website <noreply@thelimbostudio.com>`,
+        `To: ${to}`,
+        `Reply-To: ${email}`,
+        `Subject: New inquiry from ${name}`,
+        `MIME-Version: 1.0`,
+        `Content-Type: multipart/alternative; boundary="${boundary}"`,
+        ``,
+        `--${boundary}`,
+        `Content-Type: text/plain; charset=utf-8`,
+        ``,
+        `From: ${name} <${email}>`,
+        ``,
+        `${message}`,
+        ``,
+        `---`,
+        `This message was sent from the contact form at thelimbostudio.com`,
+        `--${boundary}`,
+        `Content-Type: text/html; charset=utf-8`,
+        ``,
+        `<p><strong>From:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>`,
+        `<pre>${escapeHtml(message)}</pre>`,
+        `<hr>`,
+        `<p><small>This message was sent from the contact form at thelimbostudio.com</small></p>`,
+        `--${boundary}--`
+      ].join('\r\n');
 
-      const resp = await fetch('https://api.mailchannels.net/tx/v1/send', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+      try {
+        const emailMessage = new EmailMessage(
+          'noreply@thelimbostudio.com',
+          to,
+          mimeContent
+        );
 
-      if (!resp.ok) {
-        const t = await resp.text();
-        return json({ ok: false, error: 'Mail send failed', detail: t }, 502);
+        await env.SEB.send(emailMessage);
+        return json({ ok: true });
+      } catch (e) {
+        console.error('Email send error:', e);
+        return json({ ok: false, error: 'Mail send failed', detail: e.message }, 502);
       }
-
-      return json({ ok: true });
     } catch (e) {
       return json({ ok: false, error: 'Invalid request' }, 400);
     }
