@@ -701,7 +701,9 @@
           
           <div class="limbo-chat-messages" id="limbo-messages">
             <div class="limbo-message bot">
-              <div class="limbo-message-avatar">🤖</div>
+              <div class="limbo-message-avatar">
+                <img src="/assets/logo.png" alt="Limbo Studio" style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
               <div class="limbo-message-content">
                 <p><strong>Hey there!</strong> I'm here to help you scope out AI automation for your team.</p>
                 <p>Pick a starting point or tell me what you're working on:</p>
@@ -827,7 +829,9 @@
         typingDiv.className = 'limbo-message bot';
         typingDiv.id = 'limbo-typing-indicator';
         typingDiv.innerHTML = `
-          <div class="limbo-message-avatar">🤖</div>
+          <div class="limbo-message-avatar">
+            <img src="/assets/logo.png" alt="Limbo Studio" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
           <div class="limbo-message-content">
             <div class="limbo-typing">
               <span></span>
@@ -841,9 +845,11 @@
         const messageDiv = document.createElement('div');
         messageDiv.className = `limbo-message ${role}`;
         
-        const avatar = role === 'bot' ? '🤖' : '👤';
+        const avatar = role === 'bot'
+          ? '<img src="/assets/logo.png" alt="Limbo Studio" style="width: 100%; height: 100%; object-fit: contain;">'
+          : '👤';
         const formattedContent = this.formatMessage(content);
-        
+
         messageDiv.innerHTML = `
           <div class="limbo-message-avatar">${avatar}</div>
           <div class="limbo-message-content">${formattedContent}</div>
