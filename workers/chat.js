@@ -1,7 +1,5 @@
-// Limbo Studio Chat Worker (Cloudflare Email Routing version)
+// Limbo Studio Chat Worker (Resend API version)
 // Handles conversational AI for project scoping and qualification
-
-import { EmailMessage } from "cloudflare:email";
 
 // Model configuration
 const MODEL_CONFIG = {
@@ -544,29 +542,33 @@ async function sendEscalationEmail(env, sessionId, session, triggerMessage, esca
 }
 
 async function sendEmailViaCF(env, htmlContent, replyTo = null, customSubject = null) {
-  const boundary = '----boundary' + Date.now();
   const to = env.EMAIL_TO || 'contact@thelimbostudio.com';
   const subject = customSubject || 'New AI Chat Lead';
 
-  const mimeContent = [
-    `From: Limbo Studio Chat <noreply@thelimbostudio.com>`,
-    `To: ${to}`,
-    replyTo ? `Reply-To: ${replyTo}` : '',
-    `Subject: ${subject}`,
-    `MIME-Version: 1.0`,
-    `Content-Type: text/html; charset=utf-8`,
-    ``,
-    htmlContent
-  ].filter(Boolean).join('\r\n');
-
   try {
-    const emailMessage = new EmailMessage(
-      'noreply@thelimbostudio.com',
-      to,
-      mimeContent
-    );
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        from: 'Limbo Studio Chat <noreply@thelimbostudio.com>',
+        to: [to],
+        subject: subject,
+        html: htmlContent,
+        reply_to: replyTo || undefined
+      })
+    });
 
-    await env.SEB.send(emailMessage);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Resend API error:', response.status, errorText);
+      return false;
+    }
+
+    const data = await response.json();
+    console.log('Email sent successfully:', data.id);
     return true;
   } catch (e) {
     console.error('Email send error:', e);
