@@ -1,1 +1,100 @@
-replace
+{
+  "generated_at": "2025-10-04T17:53:49.920Z",
+  "version": "1.0",
+  "document_count": 4,
+  "documents": [
+    {
+      "id": "pricing-pricing-bands",
+      "title": "Limbo Studio Pricing Reference",
+      "tags": [
+        "pricing",
+        "investment",
+        "cost",
+        "budget"
+      ],
+      "keywords": [
+        "price",
+        "cost",
+        "budget",
+        "investment",
+        "timeline",
+        "how much",
+        "rates"
+      ],
+      "category": "reference",
+      "time_band_weeks": null,
+      "price_band_usd": null,
+      "body_md": "## Service Tiers\n\nAll pricing is project-based, not hourly. These are typical ranges—actual quotes depend on scope, complexity, and timeline.\n\n### Discovery & Planning\n\n**AI Readiness Assessment**\n- Duration: 1-2 weeks\n- Investment: $1,500 - $3,000\n- Deliverables: Workflow audit, opportunity scoring, 90-day roadmap\n\n### Architecture & Design\n\n**System Design & Prototyping**\n- Duration: 1-3 weeks  \n- Investment: $2,500 - $6,000\n- Deliverables: Technical architecture, proof-of-concept, tool selection\n\n### Implementation\n\n**Light Implementation** (single workflow)\n- Duration: 2-4 weeks\n- Investment: $4,000 - $8,000\n- Examples: Simple chatbot, basic document routing, single dashboard\n\n**Standard Implementation** (multi-workflow or complex)\n- Duration: 4-6 weeks\n- Investment: $8,000 - $15,000\n- Examples: Advanced chatbot with RAG, multi-step automation, integrated systems\n\n**Complex Implementation** (enterprise-scale)\n- Duration: 6-12 weeks\n- Investment: $15,000 - $30,000\n- Examples: Multi-department rollout, heavy compliance requirements, custom AI models\n\n### Training & Support\n\n**Training & Change Management**\n- Duration: 0.5-2 weeks\n- Investment: $1,000 - $4,000\n- Deliverables: Staff training, documentation, adoption support\n\n**Monthly Retainer** (ongoing optimization)\n- Duration: Ongoing\n- Investment: $2,000 - $8,000/month\n- Includes: System monitoring, iterative improvements, prompt tuning, support\n\n## What's Included in All Projects\n\n- Project management and coordination\n- Regular check-ins and status updates\n- Documentation and handoff materials\n- 30-day post-launch support window\n- Security and compliance review\n\n## What's NOT Included\n\n- Third-party software licenses (OpenAI, Anthropic, etc.)\n- Hosting and infrastructure costs\n- Enterprise software integrations requiring vendor contracts\n- Legal/compliance consultation (we recommend, you implement)\n\n## Payment Terms\n\n- 50% upfront, 50% upon completion (projects under $10k)\n- 33% upfront, 33% mid-project, 34% completion (projects over $10k)\n- Monthly billing for retainer arrangements\n- Net 15 payment terms\n\n## How to Get a Custom Quote\n\n1. Book a 20-minute fit call on our website\n2. We'll discuss your goals, constraints, and timeline\n3. Receive a detailed proposal within 2-3 business days\n4. Kick off within 1-2 weeks of agreement"
+    },
+    {
+      "id": "services-document-automation",
+      "title": "Document Processing & Routing Automation",
+      "tags": [
+        "automation",
+        "documents",
+        "workflow",
+        "processing"
+      ],
+      "keywords": [
+        "pdf",
+        "forms",
+        "extraction",
+        "routing",
+        "chaos",
+        "document",
+        "workflow",
+        "intake"
+      ],
+      "category": "implementation",
+      "time_band_weeks": "2-4",
+      "price_band_usd": "4-7k",
+      "body_md": "## Overview\n\nAutomate document intake, classification, data extraction, and intelligent routing to eliminate manual handling and reduce processing time by 50-70%.\n\n## What's Included\n\n- **Workflow Mapping**: Document your current process, identify bottlenecks, design automated flow\n- **Classification System**: AI-powered document type detection (invoices, contracts, forms, etc.)\n- **Data Extraction**: Pull structured data from PDFs and scanned documents (OCR when needed)\n- **Intelligent Routing**: Auto-route documents to correct teams/systems based on content and urgency\n- **Validation & Guardrails**: Human-in-the-loop review for edge cases and confidence thresholds\n- **Integration**: Connect to your existing tools (email, Dropbox, SharePoint, internal systems)\n\n## Timeline & Investment\n\n- **Duration**: 2-4 weeks depending on document types and integrations\n- **Investment**: $4-7k for initial setup\n- **Monthly costs**: $100-300 for processing volume and storage\n\n## Typical Results\n\n- 50-70% reduction in manual document handling time\n- 90%+ classification accuracy\n- Same-day processing vs. multi-day backlogs\n- Audit trail for compliance and tracking\n- Freed up staff time for higher-value work\n\n## Best Suited For\n\n- Finance teams drowning in invoices and receipts\n- HR departments processing applications and forms\n- Legal teams managing contract intake\n- Healthcare practices with patient paperwork\n- Any team with repetitive document workflows"
+    },
+    {
+      "id": "services-readiness-audit",
+      "title": "AI Readiness Assessment",
+      "tags": [
+        "discovery",
+        "audit",
+        "planning",
+        "assessment"
+      ],
+      "keywords": [
+        "readiness",
+        "roi",
+        "assessment",
+        "roadmap",
+        "discovery",
+        "planning",
+        "audit"
+      ],
+      "category": "discovery",
+      "time_band_weeks": "1-2",
+      "price_band_usd": "1.5-3k",
+      "body_md": "## Overview\n\nComprehensive assessment to identify high-ROI AI opportunities in your organization and create a prioritized 90-day implementation roadmap.\n\n## What's Included\n\n- **Stakeholder Interviews**: Talk to 5-10 key people across departments to understand pain points and goals\n- **Workflow Mapping**: Document current processes and identify automation candidates\n- **Data Discovery**: Assess data availability, quality, and readiness for AI implementation\n- **Compliance Review**: Check for regulatory requirements (HIPAA, GDPR, SOC 2, etc.)\n- **Opportunity Scoring**: Rank potential projects by ROI, feasibility, and strategic alignment\n- **90-Day Roadmap**: Prioritized plan with 2-3 pilot projects, timeline estimates, and budget ranges\n\n## Timeline & Investment\n\n- **Duration**: 1-2 weeks from kickoff to final presentation\n- **Investment**: $1.5-3k depending on organization size\n- **Deliverable**: Detailed report + roadmap presentation\n\n## What You'll Get\n\nA comprehensive report including:\n- Current state assessment and pain points\n- Ranked list of automation opportunities\n- Technical feasibility for each opportunity\n- ROI estimates and success metrics\n- 90-day implementation roadmap\n- Risk assessment and mitigation strategies\n- Vendor/tool recommendations where applicable\n\n## Best Suited For\n\n- Companies exploring AI but unsure where to start\n- Teams with multiple potential use cases needing prioritization\n- Organizations seeking executive buy-in with data-driven recommendations\n- Companies wanting to avoid costly mistakes or vendor lock-in"
+    },
+    {
+      "id": "services-website-chatbot",
+      "title": "Website Customer Support Chatbot",
+      "tags": [
+        "chatbot",
+        "web",
+        "support",
+        "customer-service"
+      ],
+      "keywords": [
+        "chat",
+        "faq",
+        "deflection",
+        "customer service",
+        "help desk",
+        "website",
+        "support"
+      ],
+      "category": "implementation",
+      "time_band_weeks": "3-5",
+      "price_band_usd": "5-8k",
+      "body_md": "## Overview\n\nBuild an AI-powered chatbot for your website that handles FAQs, routes complex queries, and deflects 20-40% of support tickets.\n\n## What's Included\n\n- **Discovery & Design**: Map your current support flow, identify FAQ patterns, design conversation flows with escalation paths\n- **RAG Implementation**: Build knowledge base from your documentation, FAQs, and support history\n- **Chatbot Development**: Create production-ready chatbot with guardrails, human escalation, and brand voice\n- **Website Integration**: Embed widget, configure CORS, test across browsers and devices\n- **Team Training**: Enable your support team to update the knowledge base and monitor performance\n- **Analytics Dashboard**: Track deflection rate, common queries, escalation patterns, and user satisfaction\n\n## Timeline & Investment\n\n- **Duration**: 3-5 weeks from kickoff to launch\n- **Investment**: $5-8k depending on complexity\n- **Monthly costs**: $50-200 for hosting and API usage\n\n## Typical Results\n\n- 20-40% ticket deflection rate\n- 24/7 availability with instant responses\n- Sub-second response times\n- Consistent brand voice across all interactions\n- Detailed analytics on customer questions and pain points\n\n## Best Suited For\n\n- E-commerce sites with repetitive product questions\n- SaaS companies with common setup/troubleshooting issues\n- Service businesses with FAQ-heavy customer inquiries\n- Companies looking to scale support without adding headcount"
+    }
+  ]
+}
