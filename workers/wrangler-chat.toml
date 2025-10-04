@@ -13,7 +13,7 @@ routes = [
 # Run: wrangler kv:namespace create "CHAT_KV" --config wrangler-chat.toml
 # Run: wrangler kv:namespace create "CHAT_KV" --preview --config wrangler-chat.toml
 kv_namespaces = [
-    { binding = "CHAT_KV", id = "YOUR_KV_NAMESPACE_ID", preview_id = "YOUR_PREVIEW_KV_ID" }
+    { binding = "CHAT_KV", id = "63e8a28af30f4102bd979277d8fd041d", preview_id = "7aaf80c97c71430a81ba53c3cf913845" }
 ]
 
 # Email binding (reusing same SEB binding as contact worker)
