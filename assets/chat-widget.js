@@ -460,11 +460,223 @@
         .limbo-status-message.error {
           color: #f87171;
         }
-        
+
+        /* Rate Limit Modal */
+        .limbo-rate-limit-modal {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000000;
+          padding: 20px;
+        }
+
+        .limbo-modal-content {
+          background: ${CONFIG.panelColor};
+          border-radius: 16px;
+          max-width: 500px;
+          width: 100%;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+          animation: limbo-modal-slide 0.3s ease;
+        }
+
+        @keyframes limbo-modal-slide {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .limbo-modal-header {
+          padding: 24px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .limbo-modal-header h3 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 600;
+          color: white;
+        }
+
+        .limbo-modal-close {
+          background: none;
+          border: none;
+          color: #9fb0c3;
+          font-size: 28px;
+          cursor: pointer;
+          padding: 0;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          transition: all 0.2s;
+        }
+
+        .limbo-modal-close:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+        }
+
+        .limbo-modal-body {
+          padding: 24px;
+          color: #e0e8f0;
+        }
+
+        .limbo-modal-body > p {
+          margin: 0 0 20px;
+          font-size: 15px;
+          line-height: 1.6;
+        }
+
+        .limbo-summary-section {
+          background: rgba(142, 203, 255, 0.1);
+          border-left: 3px solid ${CONFIG.primaryColor};
+          padding: 16px;
+          border-radius: 8px;
+          margin-bottom: 20px;
+        }
+
+        .limbo-summary-section h4 {
+          margin: 0 0 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: ${CONFIG.primaryColor};
+        }
+
+        .limbo-summary-text {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1.6;
+          color: #c9d7e5;
+        }
+
+        .limbo-inquiry-section h4 {
+          margin: 0 0 8px;
+          font-size: 14px;
+          font-weight: 600;
+          color: white;
+        }
+
+        .limbo-inquiry-section > p {
+          margin: 0 0 12px;
+          font-size: 13px;
+          color: #9fb0c3;
+        }
+
+        .limbo-modal-input,
+        .limbo-modal-textarea {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          background: ${CONFIG.bgColor};
+          color: white;
+          font-size: 14px;
+          font-family: inherit;
+          margin-bottom: 12px;
+          box-sizing: border-box;
+        }
+
+        .limbo-modal-input:focus,
+        .limbo-modal-textarea:focus {
+          outline: none;
+          border-color: ${CONFIG.primaryColor};
+        }
+
+        .limbo-modal-textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+
+        .limbo-modal-footer {
+          padding: 16px 24px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          display: flex;
+          gap: 12px;
+          justify-content: flex-end;
+        }
+
+        .limbo-modal-btn {
+          padding: 10px 20px;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .limbo-modal-btn.primary {
+          background: linear-gradient(135deg, ${CONFIG.primaryColor}, ${CONFIG.accentColor});
+          color: ${CONFIG.bgColor};
+        }
+
+        .limbo-modal-btn.primary:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(142, 203, 255, 0.3);
+        }
+
+        .limbo-modal-btn.primary:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .limbo-modal-btn.secondary {
+          background: rgba(255, 255, 255, 0.1);
+          color: white;
+        }
+
+        .limbo-modal-btn.secondary:hover {
+          background: rgba(255, 255, 255, 0.15);
+        }
+
+        .limbo-modal-status {
+          padding: 0 24px 16px;
+          margin: 0;
+          font-size: 13px;
+          text-align: center;
+        }
+
+        .limbo-modal-status.success {
+          color: #4ade80;
+        }
+
+        .limbo-modal-status.error {
+          color: #f87171;
+        }
+
         @media (max-width: 480px) {
           #limbo-chat-panel {
             width: calc(100vw - 40px);
             height: calc(100vh - 120px);
+          }
+
+          .limbo-modal-content {
+            max-width: calc(100vw - 40px);
+          }
+
+          .limbo-modal-footer {
+            flex-direction: column-reverse;
+          }
+
+          .limbo-modal-btn {
+            width: 100%;
           }
         }
       `;
@@ -743,7 +955,13 @@
       } catch (error) {
         this.removeTypingIndicator();
         console.error('Send message error:', error);
-        this.addMessage('bot', error.message || 'Sorry, something went wrong. Please try again or email us at contact@thelimbostudio.com');
+
+        // Check if this is a rate limit error
+        if (error.message && error.message.includes('rate limit')) {
+          this.showRateLimitModal();
+        } else {
+          this.addMessage('bot', error.message || 'Sorry, something went wrong. Please try again or email us at contact@thelimbostudio.com');
+        }
       } finally {
         this.isLoading = false;
         document.getElementById('limbo-chat-send').disabled = false;
@@ -826,8 +1044,133 @@
         submitBtn.disabled = false;
       }
     }
+
+    showRateLimitModal() {
+      // Generate conversation summary
+      const summary = this.generateConversationSummary();
+
+      // Create modal overlay
+      const modal = document.createElement('div');
+      modal.className = 'limbo-rate-limit-modal';
+      modal.innerHTML = `
+        <div class="limbo-modal-content">
+          <div class="limbo-modal-header">
+            <h3>⏱️ Rate Limit Reached</h3>
+            <button class="limbo-modal-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="limbo-modal-body">
+            <p>You've hit our conversation limit, but we'd love to continue helping you!</p>
+
+            <div class="limbo-summary-section">
+              <h4>📝 Conversation Summary</h4>
+              <p class="limbo-summary-text">${summary}</p>
+            </div>
+
+            <div class="limbo-inquiry-section">
+              <h4>📧 Send Your Inquiry</h4>
+              <p>Share your email so we can continue this conversation personally:</p>
+              <input
+                type="email"
+                id="limbo-modal-email"
+                placeholder="your@email.com"
+                class="limbo-modal-input"
+              />
+              <textarea
+                id="limbo-modal-request"
+                placeholder="Describe what you need help with (optional - we already have your conversation)"
+                class="limbo-modal-textarea"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+          <div class="limbo-modal-footer">
+            <button class="limbo-modal-btn secondary" id="limbo-modal-cancel">Maybe Later</button>
+            <button class="limbo-modal-btn primary" id="limbo-modal-submit">Send Inquiry</button>
+          </div>
+          <p class="limbo-modal-status" id="limbo-modal-status"></p>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      // Event listeners
+      const closeBtn = modal.querySelector('.limbo-modal-close');
+      const cancelBtn = modal.querySelector('#limbo-modal-cancel');
+      const submitBtn = modal.querySelector('#limbo-modal-submit');
+      const emailInput = modal.querySelector('#limbo-modal-email');
+      const requestInput = modal.querySelector('#limbo-modal-request');
+      const statusEl = modal.querySelector('#limbo-modal-status');
+
+      const closeModal = () => {
+        modal.remove();
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+
+      submitBtn.addEventListener('click', async () => {
+        const email = emailInput.value.trim();
+        const request = requestInput.value.trim();
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          statusEl.textContent = 'Please enter a valid email address';
+          statusEl.className = 'limbo-modal-status error';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        statusEl.textContent = '';
+
+        try {
+          const response = await fetch(CONFIG.sendEndpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              session_id: this.sessionId,
+              visitor_email: email,
+              consent: true,
+              transcript: this.messages,
+              plan: this.currentPlan,
+              additional_request: request || null
+            })
+          });
+
+          const data = await response.json();
+
+          if (!data.ok) {
+            throw new Error(data.message || 'Failed to send');
+          }
+
+          statusEl.textContent = `✓ Sent! We'll reach out within 24 hours. Ticket: ${data.ticket_id}`;
+          statusEl.className = 'limbo-modal-status success';
+
+          setTimeout(closeModal, 3000);
+
+        } catch (error) {
+          console.error('Send inquiry error:', error);
+          statusEl.textContent = '✗ Failed to send. Please email contact@thelimbostudio.com';
+          statusEl.className = 'limbo-modal-status error';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Send Inquiry';
+        }
+      });
+    }
+
+    generateConversationSummary() {
+      if (this.messages.length === 0) {
+        return 'You started a conversation but hit the rate limit before sending messages.';
+      }
+
+      const userMessages = this.messages.filter(m => m.role === 'user').map(m => m.content);
+      const topics = userMessages.join('. ').slice(0, 300);
+
+      return `You discussed: ${topics}${topics.length >= 300 ? '...' : ''}`;
+    }
   }
-  
+
   // Initialize widget when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => new LimboChatWidget());
