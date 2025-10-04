@@ -1,0 +1,21 @@
+{
+  "name": "thelimbostudio-chat",
+  "version": "1.0.0",
+  "description": "AI chat widget for The Limbo Studio website",
+  "scripts": {
+    "build-kb": "node scripts/build-kb.js",
+    "deploy-contact": "cd workers && wrangler deploy --config wrangler.toml",
+    "deploy-chat": "cd workers && wrangler deploy --config wrangler-chat.toml",
+    "deploy-all": "npm run build-kb && npm run deploy-contact && npm run deploy-chat"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imdoingsomething/thelimbostudio-site"
+  },
+  "author": "The Limbo Studio",
+  "license": "UNLICENSED"
+}
