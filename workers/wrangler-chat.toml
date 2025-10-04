@@ -1,0 +1,51 @@
+name = "limbo-chat"
+main = "chat.js"
+compatibility_date = "2025-01-01"
+
+# Routes for chat endpoints
+routes = [
+    { pattern = "thelimbostudio.com/api/chat", custom_domain = false },
+    { pattern = "thelimbostudio.com/api/send-transcript", custom_domain = false },
+    { pattern = "thelimbostudio.com/api/health", custom_domain = false }
+]
+
+# KV namespace for session storage
+# Run: wrangler kv:namespace create "CHAT_KV" --config wrangler-chat.toml
+# Run: wrangler kv:namespace create "CHAT_KV" --preview --config wrangler-chat.toml
+kv_namespaces = [
+    { binding = "CHAT_KV", id = "YOUR_KV_NAMESPACE_ID", preview_id = "YOUR_PREVIEW_KV_ID" }
+]
+
+# Email binding (reusing same SEB binding as contact worker)
+[[email_bindings]]
+name = "SEB"
+
+# Environment variables
+[vars]
+EMAIL_TO = "contact@thelimbostudio.com"
+
+# Secrets (set via: wrangler secret put SECRET_NAME --config wrangler-chat.toml)
+# Required secrets:
+# - OPENAI_API_KEY: Your OpenAI API key
+# 
+# To set secrets:
+# wrangler secret put OPENAI_API_KEY --config wrangler-chat.toml
+
+# ============================================================================
+# DEPLOYMENT INSTRUCTIONS
+# ============================================================================
+#
+# 1. Create KV namespace:
+#    wrangler kv:namespace create "CHAT_KV" --config wrangler-chat.toml
+#    wrangler kv:namespace create "CHAT_KV" --preview --config wrangler-chat.toml
+#
+# 2. Update the kv_namespaces section above with the IDs returned
+#
+# 3. Set secrets:
+#    wrangler secret put OPENAI_API_KEY --config wrangler-chat.toml
+#
+# 4. Deploy:
+#    wrangler deploy --config wrangler-chat.toml
+#
+# 5. Test:
+#    curl https://thelimbostudio.com/api/health
