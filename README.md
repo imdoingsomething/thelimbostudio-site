@@ -81,10 +81,16 @@ routes = [
   - `mail.protonmail.ch` (Priority 10)
   - `mailsec.protonmail.ch` (Priority 20)
 
-- **Resend Records** (for sending):
-  - SPF: `v=spf1 include:_spf.resend.com ~all`
-  - DKIM: Custom record provided by Resend
-  - DMARC: `v=DMARC1; p=none;`
+- **Email Authentication Records** (for sending):
+  - **SPF**: `v=spf1 include:_spf.resend.com include:_spf.mx.cloudflare.net ~all`
+    - Includes Resend (chat widget) and Cloudflare (contact form)
+  - **DKIM**: Custom record provided by Resend (configure in Resend dashboard)
+    - Verify domain: thelimbostudio.com
+    - Add DKIM TXT records to Cloudflare DNS
+  - **DMARC**: `v=DMARC1; p=quarantine; rua=mailto:dmarc@thelimbostudio.com; ruf=mailto:dmarc@thelimbostudio.com; pct=100; adkim=r; aspf=r;`
+    - Policy: quarantine failed messages
+    - Alignment: relaxed (allows subdomains)
+    - Reports: aggregate (rua) and forensic (ruf)
 
 ### Cloudflare Configuration
 - **WAF Custom Rule**: Skip security checks for `/api/contact` path
