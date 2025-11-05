@@ -82,11 +82,15 @@ routes = [
   - `mailsec.protonmail.ch` (Priority 20)
 
 - **Email Authentication Records** (for sending):
-  - **SPF**: `v=spf1 include:_spf.resend.com include:_spf.mx.cloudflare.net ~all`
-    - Includes Resend (chat widget) and Cloudflare (contact form)
-  - **DKIM**: Custom record provided by Resend (configure in Resend dashboard)
-    - Verify domain: thelimbostudio.com
-    - Add DKIM TXT records to Cloudflare DNS
+  - **SPF**: `v=spf1 include:_spf.protonmail.ch include:_spf.resend.com include:_spf.mx.cloudflare.net ~all`
+    - Includes ProtonMail (alex@thelimbostudio.com), Resend (chat widget), and Cloudflare (contact form)
+  - **DKIM Records**:
+    - **ProtonMail DKIM**: Configure in ProtonMail Settings → Domains → DKIM keys
+      - Add all 3 DKIM TXT records provided by ProtonMail to Cloudflare DNS
+      - Records typically: protonmail._domainkey, protonmail2._domainkey, protonmail3._domainkey
+    - **Resend DKIM**: Configure in Resend dashboard
+      - Verify domain: thelimbostudio.com
+      - Add DKIM TXT records to Cloudflare DNS
   - **DMARC**: `v=DMARC1; p=quarantine; rua=mailto:dmarc@thelimbostudio.com; ruf=mailto:dmarc@thelimbostudio.com; pct=100; adkim=r; aspf=r;`
     - Policy: quarantine failed messages
     - Alignment: relaxed (allows subdomains)
