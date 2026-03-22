@@ -1,241 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Limbo Studio — Bespoke AI Consultancy</title>
-  <meta name="description" content="The Limbo Studio blends creativity with systems thinking to deliver human-centered AI solutions that teams actually adopt—assessments, architecture, pilots, and training." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/styles.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>The Limbo Studio</title>
+<meta name="description" content="Independent technical exploration. Building things that are useful. Minneapolis, MN."/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;background:#1e1e2e;overflow:hidden}
+body{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:14px;line-height:1.8;
+  color:#cdd6f4;
+}
+#shell{
+  width:min(860px,100vw);
+  height:100vh;
+  padding:clamp(24px,4vw,64px) clamp(20px,4vw,56px);
+  display:flex;flex-direction:column;
+}
+#output{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#313244 transparent;
+}
+#output::-webkit-scrollbar{width:3px}
+#output::-webkit-scrollbar-thumb{background:#313244}
+
+.ln{display:block;white-space:pre-wrap;word-break:break-word;min-height:1.8em}
+.logo-row{display:block;min-height:0;margin-bottom:4px;padding-top:4px;}
+
+/* catppuccin mocha token colors */
+.fg      { color:#cdd6f4 }   /* base text */
+.comment { color:#6c7086 }   /* overlay0 — comments */
+.subtext { color:#a6adc8 }   /* subtext1 */
+.purple  { color:#cba6f7 }   /* mauve — keywords */
+.teal    { color:#94e2d5 }   /* teal — strings / values */
+.green   { color:#a6e3a1 }   /* green — success */
+.blue    { color:#89b4fa }   /* blue — functions */
+.sky     { color:#89dceb }   /* sky — types */
+.peach   { color:#fab387 }   /* peach — constants */
+.red     { color:#f38ba8 }   /* red — errors */
+.yellow  { color:#f9e2af }   /* yellow — warnings */
+.bright  { color:#ffffff }   /* white */
+
+.prompt-row{
+  display:flex;align-items:center;
+  margin-top:8px;flex-shrink:0;
+  position:relative;
+}
+.sigil{color:#cba6f7;margin-right:6px;flex-shrink:0;user-select:none;font-weight:500}
+#inp{
+  background:transparent;border:none;outline:none;
+  font-family:inherit;font-size:14px;
+  color:#cdd6f4;flex:1;caret-color:#f5c2e7;min-width:0;
+}
+#caret{
+  width:2px;height:16px;background:#f5c2e7;
+  display:inline-block;vertical-align:middle;
+  animation:blink 1.2s step-end infinite;
+  flex-shrink:0;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+#ac{
+  display:none;position:absolute;
+  bottom:calc(100% + 4px);left:22px;
+  background:#181825;
+  border:1px solid #313244;
+  border-radius:4px;z-index:10;
+  min-width:260px;overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+}
+.aci{
+  padding:5px 14px;font-size:13px;cursor:pointer;
+  color:#cdd6f4;display:flex;align-items:center;gap:0;
+}
+.aci:hover,.aci.sel{background:#313244}
+.aci .aslash{color:#cba6f7;margin-right:2px}
+.aci .acmd{color:#89b4fa}
+.aci .adesc{color:#6c7086;font-size:11px;margin-left:auto;padding-left:16px}
+</style>
 </head>
 <body>
-  <header class="top">
-    <div class="wrap nav">
-      <a href="/" class="brand" aria-label="The Limbo Studio">
-        <img class="logo-img" src="/assets/logo.png" alt="The Limbo Studio logo" />
-        <span>THE LIMBO ST<span style="letter-spacing:0">U</span>DIO<br><small>Bespoke AI Consultancy</small></span>
-      </a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="/company.html">Company</a>
-        <a href="#contact" class="nav-cta">Book a Consult</a>
-      </nav>
-      <button class="burger" id="burger" aria-label="Open menu"><span></span></button>
-    </div>
-  </header>
+<div id="shell">
+  <div id="output"></div>
+  <div class="prompt-row">
+    <span class="sigil">λ</span>
+    <input id="inp" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+    <span id="caret"></span>
+    <div id="ac"></div>
+  </div>
+</div>
+<script>
+const O=document.getElementById('output');
+const I=document.getElementById('inp');
+const AC=document.getElementById('ac');
 
-  <main id="top">
-    <!-- Hero -->
-    <section class="hero">
-      <div class="wrap grid">
-        <div>
-          <div class="eyebrow">Human-centered automation</div>
-          <h1>Creativity × Systems Thinking:<br/> AI your team will actually use.</h1>
-          <p class="lead">We design and implement practical AI systems—readiness → architecture → pilot → training—so adoption sticks and ROI shows up fast.</p>
-          <div class="hero-cta">
-            <a class="btn primary" href="#contact">Get a 20-min Fit Call</a>
-            <a class="btn" href="/assets/The_Limbo_Studio_OnePager.pdf" target="_blank" rel="noopener">Download One-Pager (PDF)</a>
-          </div>
-        </div>
-        <aside>
-        <div class="hero-card">
-          <strong>Quick snapshot</strong>
-          <div class="hero-list">
-            <div class="chip">
-              <div class="chip-title">🔎 <b>Readiness</b></div>
-              <div class="chip-sub">& ROI audits</div>
-            </div>
-            <div class="chip">
-              <div class="chip-title">🧭 <b>Architecture</b></div>
-              <div class="chip-sub">& prototyping</div>
-            </div>
-            <div class="chip">
-              <div class="chip-title">⚙️ <b>Implementation</b></div>
-              <div class="chip-sub">with HITL</div>
-            </div>
-            <div class="chip">
-              <div class="chip-title">🎓 <b>Training</b></div>
-              <div class="chip-sub">& change mgmt</div>
-            </div>
-            <div class="chip">
-              <div class="chip-title">📊 <b>Dashboards</b></div>
-              <div class="chip-sub">& analytics</div>
-            </div>
-            <div class="chip">
-              <div class="chip-title">🔐 <b>Governance</b></div>
-              <div class="chip-sub">& compliance</div>
-            </div>
-          </div>
-        </div>
-        </aside>
-      </div>
-    </section>
+const CMDS=[
+  {c:'projects',d:'active work'},
+  {c:'about',   d:'who we are'},
+  {c:'contact', d:'reach out'},
+  {c:'stance',  d:'open stanceapp.org'},
+  {c:'github',  d:'open github'},
+  {c:'clear',   d:'clear buffer'},
+  {c:'help',    d:'show commands'},
+];
 
-    <!-- AI Chat CTA -->
-    <section class="chat-cta">
-      <div class="wrap">
-        <div class="chat-cta-grid">
-          <div class="chat-cta-content">
-            <h2>Not sure where to start?<br/>Ask our AI assistant.</h2>
-            <p class="lead">Our AI chat can help you:</p>
-            <ul class="chat-benefits">
-              <li>🎯 <strong>Scope your project</strong> — Answer a few questions and get a tailored implementation plan</li>
-              <li>💰 <strong>Understand pricing</strong> — Get transparent cost estimates based on your needs</li>
-              <li>⚡ <strong>Get quick answers</strong> — Learn about our services, timelines, and approach instantly</li>
-              <li>📧 <strong>Connect with our team</strong> — Complex questions get routed to human experts automatically</li>
-            </ul>
-            <p class="chat-cta-note">Start chatting in seconds—no signup required. Your conversation stays private and we'll only follow up if you want us to.</p>
-          </div>
-          <div class="chat-cta-visual">
-            <div class="chat-preview-box">
-              <div class="chat-preview-header">
-                <div class="chat-preview-dots">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <span>Limbo Studio AI</span>
-              </div>
-              <div class="chat-preview-body">
-                <div class="chat-bubble bot">
-                  <img src="/assets/logo.png" alt="" class="bubble-avatar">
-                  <div class="bubble-text">Hey there! I'm here to help you scope out AI automation for your team.</div>
-                </div>
-                <div class="chat-bubble user">
-                  <div class="bubble-text">I want to automate our document workflow...</div>
-                </div>
-                <div class="chat-bubble bot">
-                  <img src="/assets/logo.png" alt="" class="bubble-avatar">
-                  <div class="bubble-text">Great! Let's figure out the best approach for your needs...</div>
-                </div>
-              </div>
-              <button class="chat-open-cta" onclick="window.LimboChat?.open()">
-                <span>💬</span>
-                <span>Start Chatting Now</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+// each line: [colorClass, text]
+const PAGES={
+  help:[
+    ['purple','-- commands -----------------------------------------------'],
+    ['fg',''],
+    ['blue',  '  /projects   '],['comment','active work'],
+    ['blue',  '  /about      '],['comment','who we are'],
+    ['blue',  '  /contact    '],['comment','reach out'],
+    ['blue',  '  /stance     '],['comment','open stanceapp.org'],
+    ['blue',  '  /github     '],['comment','open github'],
+    ['blue',  '  /clear      '],['comment','clear the buffer'],
+    ['fg',''],
+    ['comment','-- tab to autocomplete, enter to run -----------------------'],
+  ],
+  projects:[
+    ['purple','-- projects ------------------------------------------------'],
+    ['fg',''],
+    ['peach', 'stance'],
+    ['fg',    'a web platform for structured argument annotation. users paste or'],
+    ['fg',    'link a source, select passages, tag fallacy types, and write'],
+    ['fg',    'counter-positions. each analysis produces a shareable artifact.'],
+    ['fg',    'ai scores submissions via user-supplied api keys.'],
+    ['comment','stack: fastapi · sqlite/postgres · react + vite · playwright'],
+    ['comment','       docker compose · caddy · ollama (local inference)'],
+    ['green', 'status: live   →   stanceapp.org'],
+    ['fg',''],
+    ['peach', 'discipline'],
+    ['fg',    'a modular ux framework for ai-assisted coding targeting senior'],
+    ['fg',    'engineers. replaces the chat+diff panel model with intent-first'],
+    ['fg',    'workspaces, a temporal causality view of ai reasoning, and a'],
+    ['fg',    'confidence topology layer showing where the model is guessing.'],
+    ['comment','stack: open spec + plugin api · community workspace registry'],
+    ['comment','       designed to wrap existing editors (neovim, vscode, zed)'],
+    ['blue',  'status: in build'],
+    ['fg',''],
+    ['peach', 'grey duck'],
+    ['fg',    'a private group communication system for closed organizations.'],
+    ['fg',    'non-federated — no external server connections, no data leaving'],
+    ['fg',    'the host. built on matrix/synapse with federation disabled.'],
+    ['fg',    'end-to-end encrypted rooms, invite-only, self-administered.'],
+    ['comment','stack: matrix/synapse · self-hosted on hetzner · njalla domains'],
+    ['comment','       federation disabled · e2ee · no commercial dependency'],
+    ['sky',   'status: active   not public yet'],
+  ],
+  about:[
+    ['purple','-- about ---------------------------------------------------'],
+    ['fg',''],
+    ['fg',    'technical exploration with a systems improvement background.'],
+    ['fg',    'focused on novel implementations of existing services and'],
+    ['fg',    'platforms — finding the non-obvious use of what already exists.'],
+    ['fg',''],
+    ['fg',    'some of it is serious. some of it is just messing around.'],
+    ['fg',''],
+    ['comment','location        minneapolis, mn'],
+    ['comment','infrastructure  self-hosted / hetzner dedicated'],
+    ['comment','open to         collaboration, research, press'],
+  ],
+  contact:[
+    ['purple','-- contact -------------------------------------------------'],
+    ['fg',''],
+    ['fg',    'if the work resonates, reach out.'],
+    ['fg',''],
+    ['comment','email   contact@thelimbostudio.com'],
+    ['comment','github  github.com/imdoingsomething'],
+    ['comment','stance  stanceapp.org'],
+  ],
+};
 
-    <!-- Mission band -->
-    <section class="mission-band">
-      <div class="wrap">
-        <h2 class="section-title">Mission</h2>
-        <p class="section-lead">
-          We blend creative design with disciplined systems engineering to deliver AI solutions that people actually use.
-          We bridge bold ideas with dependable implementation—automation that sticks.
-        </p>
-        <div class="mission-points">
-          <div class="point">👤 <b>Human-centered</b> adoption</div>
-          <div class="point">🎨 <b>Creative + pragmatic</b> solutions</div>
-          <div class="point">📘 <b>Repeatable</b> playbooks</div>
-          <div class="point">🧭 <b>Client empowerment</b></div>
-          <div class="point">🛡️ <b>Trust by design</b></div>
-        </div>
-      </div>
-    </section>
+let inlineNext=false;
 
-    <!-- Services -->
-    <section id="services">
-      <div class="wrap">
-        <h2 class="section-title">Bespoke services that stack end-to-end</h2>
-        <p class="section-lead">We map your processes, identify high-ROI opportunities, then deliver the architecture and implementation to make AI tangible.</p>
-        <div class="grid-3">
-          <article class="card">
-            <h3>Readiness & Roadmap</h3>
-            <p>Stakeholder interviews, workflow mapping, data discovery, risk & compliance checklists, and a prioritized 90-day plan.</p>
-          </article>
-          <article class="card">
-            <h3>Architecture & Prototyping</h3>
-            <p>System blueprints, tool selection, and rapid PoCs—from LLM orchestration to RAG, automations, and agentic flows.</p>
-          </article>
-          <article class="card">
-            <h3>Implementation & Training</h3>
-            <p>Secure deployments, dashboards for performance, staff enablement, and iterative optimization for ROI.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+function line(cls,txt){
+  if(inlineNext){
+    const last=O.lastElementChild;
+    if(last){const s=document.createElement('span');s.className=cls;s.textContent=txt;last.appendChild(s);O.scrollTop=O.scrollHeight;inlineNext=false;return last;}
+  }
+  const el=document.createElement('div');
+  el.className='ln';
+  const s=document.createElement('span');s.className=cls;s.textContent=txt;
+  el.appendChild(s);O.appendChild(el);O.scrollTop=O.scrollHeight;
+  return el;
+}
 
-    <!-- Process -->
-    <section id="process">
-      <div class="wrap">
-        <h2 class="section-title">Our process — fast pilots, measurable outcomes</h2>
-        <p class="section-lead">A clear path from discovery to adoption. Most clients see automation wins in 2–6 weeks depending on scope.</p>
-        <div class="stepper">
-          <div class="step"><div class="num">01</div><h3>Discovery</h3><p>Interviews and process mapping to find quick wins and constraints.</p></div>
-          <div class="step"><div class="num">02</div><h3>Design</h3><p>Architecture, data flow, guardrails, and KPIs; choose tools that fit.</p></div>
-          <div class="step"><div class="num">03</div><h3>Pilot</h3><p>Implement a scoped pilot with HITL safety; validate value with real users.</p></div>
-          <div class="step"><div class="num">04</div><h3>Scale</h3><p>Harden, document, train teams, and expand to adjacent workflows.</p></div>
-        </div>
-      </div>
-    </section>
+function blank(){line('fg','');}
 
-    <!-- Results -->
-    <section id="results">
-      <div class="wrap">
-        <h2 class="section-title">Outcomes we target</h2>
-        <div class="kpis">
-          <div class="k"><div class="big">30–60%</div><div class="small">Cycle-time reduction</div></div>
-          <div class="k"><div class="big">10–25×</div><div class="small">Content throughput</div></div>
-          <div class="k"><div class="big">20–40%</div><div class="small">Support deflection</div></div>
-          <div class="k"><div class="big">4–12 wks</div><div class="small">Time to pilot</div></div>
-        </div>
-      </div>
-    </section>
+function typeLines(pairs,done){
+  let i=0;
+  function next(){
+    if(i>=pairs.length){if(done)done();return;}
+    const [cls,txt]=pairs[i++];
+    line(cls,txt);
+    setTimeout(next, txt===''?20:30);
+  }
+  next();
+}
 
-    <!-- Contact -->
-    <section id="contact" class="cta">
-      <div class="wrap">
-        <div class="box">
-          <div>
-            <h2 class="section-title" style="margin:0">Let’s scope your first win</h2>
-            <p>Based in Minnetonka, MN. Remote-first. We’ll review your workflows and identify 2–3 high-ROI automations to pilot.</p>
-          </div>
-          <form id="contactForm" class="card" style="margin:0">
-            <label class="smol" for="name">Name</label>
-            <input id="name" name="name" required placeholder="Your name" />
-            <label class="smol" for="email">Email</label>
-            <input id="email" name="email" type="email" required placeholder="you@company.com" />
-            <label class="smol" for="msg">What are you trying to automate?</label>
-            <textarea id="msg" name="message" rows="4" placeholder="e.g., inbound lead triage, ticket routing, reporting…"></textarea>
-            <button class="btn primary" type="submit">Request a 20-min call</button>
-            <p class="smol" id="formNote" aria-live="polite" style="margin:8px 0 0; color: var(--muted);"></p>
-            <input type="hidden" name="_target" value="contact@thelimbostudio.com" />
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
+function renderPage(pairs){
+  blank();
+  typeLines(pairs);
+}
 
-  <footer>
-    <div class="wrap foot">
-      <div>
-        <div class="brand" style="margin-bottom:10px"><img class="logo-img" src="/assets/logo.png" alt="The Limbo Studio logo" /><span>THE LIMBO STUDIO</span></div>
-        <div class="smol">Bespoke AI Solutions • Minnetonka, MN • (651) 551-2587 • <a href="mailto:contact@thelimbostudio.com">contact@thelimbostudio.com</a></div>
-        <div class="divider"></div>
-        <div class="smol">© <span id="year"></span> The Limbo Studio. All rights reserved.</div>
-      </div>
-      <div>
-        <div class="smol">Quick links</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-          <a href="#services">Services</a>
-          <a href="#process">Process</a>
-          <a href="#results">Results</a>
-          <a href="/company.html">Company</a>
-          <a href="#contact">Contact</a>
-          <a href="/privacy.html">Privacy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+function execCmd(raw){
+  const cmd=raw.trim().replace(/^\//,'').toLowerCase();
+  if(!cmd)return;
+  const el=document.createElement('div');el.className='ln';
+  const sig=document.createElement('span');sig.className='sigil';sig.textContent='λ ';
+  const tx=document.createElement('span');tx.className='purple';tx.textContent=(raw.startsWith('/')?raw:'/'+cmd);
+  el.appendChild(sig);el.appendChild(tx);O.appendChild(el);O.scrollTop=O.scrollHeight;
 
-  <script src="/assets/script.js" defer></script>
-  <script src="/assets/chat-widget.js" defer></script>
+  if(cmd==='clear'){O.innerHTML='';return;}
+  if(cmd==='stance'){blank();line('green','opening stanceapp.org...');setTimeout(()=>window.open('https://stanceapp.org','_blank'),300);return;}
+  if(cmd==='github'){blank();line('green','opening github.com/imdoingsomething...');setTimeout(()=>window.open('https://github.com/imdoingsomething','_blank'),300);return;}
+  if(PAGES[cmd]){renderPage(PAGES[cmd]);return;}
+  blank();
+  line('red','E: unknown command: /'+cmd);
+  line('comment','type /help for available commands');
+}
+
+// autocomplete
+let acIdx=-1,acList=[];
+function drawAC(val){
+  if(!val.startsWith('/')){AC.style.display='none';acIdx=-1;return;}
+  const q=val.slice(1).toLowerCase();
+  acList=CMDS.filter(x=>x.c.startsWith(q));
+  if(!acList.length){AC.style.display='none';acIdx=-1;return;}
+  AC.innerHTML=acList.map((x,i)=>`<div class="aci${i===acIdx?' sel':''}" data-i="${i}"><span class="aslash">/</span><span class="acmd">${x.c}</span><span class="adesc">${x.d}</span></div>`).join('');
+  AC.style.display='block';
+  AC.querySelectorAll('.aci').forEach(el=>el.addEventListener('mousedown',e=>{
+    e.preventDefault();I.value='/'+acList[+el.dataset.i].c;AC.style.display='none';I.focus();
+  }));
+}
+
+I.addEventListener('input',()=>{acIdx=-1;drawAC(I.value);});
+I.addEventListener('keydown',e=>{
+  if(AC.style.display!=='none'){
+    if(e.key==='ArrowDown'){e.preventDefault();acIdx=Math.min(acIdx+1,acList.length-1);drawAC(I.value);return;}
+    if(e.key==='ArrowUp'){e.preventDefault();acIdx=Math.max(acIdx-1,0);drawAC(I.value);return;}
+    if(e.key==='Tab'){e.preventDefault();const p=acList[acIdx>=0?acIdx:0];if(p){I.value='/'+p.c;AC.style.display='none';}return;}
+    if(e.key==='Escape'){AC.style.display='none';acIdx=-1;return;}
+  }
+  if(e.key==='Enter'){const v=I.value.trim();I.value='';AC.style.display='none';acIdx=-1;if(v)execCmd(v);}
+});
+document.addEventListener('click',()=>I.focus());
+
+// boot — logo first, then text sequence
+function boot(){
+  const logoRow=document.createElement('div');
+  logoRow.className='logo-row';
+  const img=document.createElement('img');
+  img.src='/assets/logo.png';
+  img.alt='The Limbo Studio';
+  img.style.cssText='width:72px;height:72px;display:block;opacity:0.92;image-rendering:crisp-edges;';
+  logoRow.appendChild(img);
+  O.appendChild(logoRow);
+
+  const BOOT=[
+    ['comment','-- limbo-studio v1.0.0 (2026-03-22) -----------------------'],
+    ['fg',''],
+    ['bright', 'THE LIMBO STUDIO'],
+    ['comment','minneapolis  ·  independent  ·  2026'],
+    ['fg',''],
+    ['teal',   'Building things that are useful.'],
+    ['fg',''],
+    ['subtext','type / to navigate'],
+    ['comment','press tab to autocomplete   /help for all commands'],
+    ['fg',''],
+    ['comment','------------------------------------------------------------'],
+    ['fg',''],
+  ];
+  typeLines(BOOT,()=>I.focus());
+}
+
+boot();
+</script>
 </body>
 </html>
