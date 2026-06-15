@@ -99,13 +99,14 @@ const I=document.getElementById('inp');
 const AC=document.getElementById('ac');
 
 const CMDS=[
-  {c:'projects',d:'active work'},
-  {c:'about',   d:'who we are'},
-  {c:'contact', d:'reach out'},
-  {c:'stance',  d:'open stanceapp.org'},
-  {c:'github',  d:'open github'},
-  {c:'clear',   d:'clear buffer'},
-  {c:'help',    d:'show commands'},
+  {c:'projects', d:'active work'},
+  {c:'about',    d:'who we are'},
+  {c:'contact',  d:'reach out'},
+  {c:'stance',   d:'open stanceapp.org'},
+  {c:'formwell', d:'open formwell.thelimbostudio.com'},
+  {c:'github',   d:'open github'},
+  {c:'clear',    d:'clear buffer'},
+  {c:'help',     d:'show commands'},
 ];
 
 // each line: [colorClass, text]
@@ -117,6 +118,7 @@ const PAGES={
     ['blue',  '  /about      '],['comment','who we are'],
     ['blue',  '  /contact    '],['comment','reach out'],
     ['blue',  '  /stance     '],['comment','open stanceapp.org'],
+    ['blue',  '  /formwell   '],['comment','open formwell.thelimbostudio.com'],
     ['blue',  '  /github     '],['comment','open github'],
     ['blue',  '  /clear      '],['comment','clear the buffer'],
     ['fg',''],
@@ -151,6 +153,15 @@ const PAGES={
     ['comment','stack: matrix/synapse · self-hosted on hetzner · njalla domains'],
     ['comment','       federation disabled · e2ee · no commercial dependency'],
     ['sky',   'status: active   not public yet'],
+    ['fg',''],
+    ['peach', 'formwell'],
+    ['fg',    'a desktop application for clinical report writing in psychology'],
+    ['fg',    'practices. replaces fragmented template workflows with structured'],
+    ['fg',    'report generation, cutting documentation time for psychologists.'],
+    ['fg',    'one-time purchase — no subscription, no cloud dependency.'],
+    ['comment','stack: electron · react · typescript · vite'],
+    ['comment','       one-time license · offline-first · mac + windows'],
+    ['green', 'status: live   →   formwell.thelimbostudio.com'],
   ],
   about:[
     ['purple','-- about ---------------------------------------------------'],
@@ -218,6 +229,7 @@ function execCmd(raw){
 
   if(cmd==='clear'){O.innerHTML='';return;}
   if(cmd==='stance'){blank();line('green','opening stanceapp.org...');setTimeout(()=>window.open('https://stanceapp.org','_blank'),300);return;}
+  if(cmd==='formwell'){blank();line('green','opening formwell.thelimbostudio.com...');setTimeout(()=>window.open('https://formwell.thelimbostudio.com','_blank'),300);return;}
   if(cmd==='github'){blank();line('green','opening github.com/imdoingsomething...');setTimeout(()=>window.open('https://github.com/imdoingsomething','_blank'),300);return;}
   if(PAGES[cmd]){renderPage(PAGES[cmd]);return;}
   blank();
