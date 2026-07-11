@@ -104,6 +104,7 @@ const CMDS=[
   {c:'contact',  d:'reach out'},
   {c:'stance',   d:'open stanceapp.org'},
   {c:'formwell', d:'open formwell.thelimbostudio.com'},
+  {c:'jobs',     d:'open jobscout — job finder'},
   {c:'github',   d:'open github'},
   {c:'clear',    d:'clear buffer'},
   {c:'help',     d:'show commands'},
@@ -119,6 +120,7 @@ const PAGES={
     ['blue',  '  /contact    '],['comment','reach out'],
     ['blue',  '  /stance     '],['comment','open stanceapp.org'],
     ['blue',  '  /formwell   '],['comment','open formwell.thelimbostudio.com'],
+    ['blue',  '  /jobs       '],['comment','open jobscout — job finder'],
     ['blue',  '  /github     '],['comment','open github'],
     ['blue',  '  /clear      '],['comment','clear the buffer'],
     ['fg',''],
@@ -230,6 +232,7 @@ function execCmd(raw){
   if(cmd==='clear'){O.innerHTML='';return;}
   if(cmd==='stance'){blank();line('green','opening stanceapp.org...');setTimeout(()=>window.open('https://stanceapp.org','_blank'),300);return;}
   if(cmd==='formwell'){blank();line('green','opening formwell.thelimbostudio.com...');setTimeout(()=>window.open('https://formwell.thelimbostudio.com','_blank'),300);return;}
+  if(cmd==='jobs'){blank();line('green','opening jobscout...');setTimeout(()=>window.open('/jobscout/','_blank'),300);return;}
   if(cmd==='github'){blank();line('green','opening github.com/imdoingsomething...');setTimeout(()=>window.open('https://github.com/imdoingsomething','_blank'),300);return;}
   if(PAGES[cmd]){renderPage(PAGES[cmd]);return;}
   blank();
