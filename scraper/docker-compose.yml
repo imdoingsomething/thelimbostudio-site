@@ -1,0 +1,29 @@
+services:
+  scraper:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data:/data
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      # set DOMAIN in .env (e.g. jobs.example.com) for automatic HTTPS;
+      # leave unset to serve plain HTTP on the server IP
+      - DOMAIN=${DOMAIN:-:80}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./data/public:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
