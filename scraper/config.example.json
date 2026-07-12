@@ -14,11 +14,11 @@
     "hn_hiring": { "enabled": true },
     "greenhouse": {
       "enabled": true,
-      "boards": ["gitlab", "cloudflare"]
+      "boards": ["jamf", "crashplan", "neuehealth", "businessolver"]
     },
     "lever": {
       "enabled": true,
-      "boards": []
+      "boards": ["tkda"]
     }
   }
 }
