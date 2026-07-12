@@ -815,7 +815,7 @@ async function aiTailor(j){
         'anthropic-dangerous-direct-browser-access':'true',
       },
       body: JSON.stringify({
-        model:'claude-opus-4-8',
+        model:'claude-opus-4-5',
         max_tokens:8000,
         thinking:{type:'adaptive'},
         system:'You are an expert resume writer. Rewrite the candidate\'s resume to target the given job description. Rules: NEVER invent experience, employers, dates, degrees, or skills not present in the original resume. You may reorder, rephrase, quantify-where-stated, emphasize relevant experience, mirror terminology from the job description where truthful, and trim irrelevant content. Output clean Markdown: name/contact (as given), a 2-3 line targeted summary, skills (most relevant first), experience (relevant bullets first), education. After the resume, add a short "Gaps to address honestly" section listing job requirements the candidate does not evidence.',
