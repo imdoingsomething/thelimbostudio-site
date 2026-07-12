@@ -245,6 +245,11 @@ footer{margin-top:40px;font-size:11px;color:var(--overlay);text-align:center}
               <option value="senior">senior / lead</option>
             </select>
           </div>
+          <div class="field">
+            <label>scraper server URL (optional)</label>
+            <input id="serverUrl" placeholder="e.g. https://jobs.thelimbostudio.com"/>
+            <div class="note">self-hosted JobScout scraper feed (see /scraper in the repo). adds WWR, HN who's-hiring, and company ATS boards. blank = browser sources only.</div>
+          </div>
           <div class="savebar">
             <button class="btn primary" id="saveSetup">save &amp; rescore</button>
             <span class="okmsg" id="saveMsg"></span>
@@ -273,13 +278,14 @@ footer{margin-top:40px;font-size:11px;color:var(--overlay);text-align:center}
     <button class="src loading" data-src="remoteok"><span class="dot"></span>remoteok</button>
     <button class="src loading" data-src="arbeitnow"><span class="dot"></span>arbeitnow</button>
     <button class="src loading" data-src="jobicy"><span class="dot"></span>jobicy</button>
+    <button class="src loading" data-src="server"><span class="dot"></span>server</button>
     <button class="btn small" id="reload" style="margin-left:auto">↻ refresh</button>
   </div>
   <div id="status">loading jobs…</div>
   <div id="list"></div>
   <button class="btn" id="more" style="display:none">show more</button>
 
-  <footer>jobscout · the limbo studio · data via public job APIs (remotive, remoteok, arbeitnow, jobicy) · nothing tracked</footer>
+  <footer>jobscout · the limbo studio · data via public job APIs (remotive, remoteok, arbeitnow, jobicy) + optional self-hosted scraper · nothing tracked</footer>
 </div>
 
 <!-- drawer -->
@@ -342,15 +348,16 @@ footer{margin-top:40px;font-size:11px;color:var(--overlay);text-align:center}
 'use strict';
 /* ============================== state ============================== */
 const LS = {
-  resume:'js_resume', wants:'js_wants', key:'js_anthropic_key',
+  resume:'js_resume', wants:'js_wants', key:'js_anthropic_key', server:'js_server',
 };
 const state = {
   jobs: [],                 // normalized
   resume: localStorage.getItem(LS.resume) || '',
   wants: JSON.parse(localStorage.getItem(LS.wants) || '{}'),
+  server: localStorage.getItem(LS.server) || '',
   filters: { q:'', remote:false, msp:false, salary:false, minsal:false },
   sort: 'fit',
-  srcOn: { remotive:true, remoteok:true, arbeitnow:true, jobicy:true },
+  srcOn: { remotive:true, remoteok:true, arbeitnow:true, jobicy:true, server:true },
   shown: 40,
   current: null,            // job open in drawer
 };
@@ -585,6 +592,18 @@ const SOURCES = {
       salMin:x.annualSalaryMin>1000?+x.annualSalaryMin:null, salMax:x.annualSalaryMax>1000?+x.annualSalaryMax:null,
     }));
   },
+  server: async () => {
+    const base = (state.server||'').trim().replace(/\/+$/,'');
+    if(!base) throw new Error('no server URL configured');
+    const r = await fetch(base + '/jobs.json');
+    const d = await r.json();
+    return (d.jobs||[]).map(x => normJob({
+      src:'server', id:x.id, title:x.title, company:x.company,
+      location:x.location, remote:!!x.remote, url:x.url, date:x.date,
+      tags:[x.src, ...(x.tags||[])], descHtml:x.desc_html,
+      salMin:x.sal_min, salMax:x.sal_max, salText:x.sal_text,
+    }));
+  },
 };
 
 async function loadJobs(){
@@ -594,6 +613,11 @@ async function loadJobs(){
   const seen = new Set();
   await Promise.all(Object.entries(SOURCES).map(async ([name, fn]) => {
     const el = $(`.src[data-src="${name}"]`);
+    if(name === 'server' && !(state.server||'').trim()){
+      el.classList.remove('loading','ok','err');
+      el.title = 'no scraper server configured — set its URL in setup';
+      return;
+    }
     el.classList.remove('ok','err'); el.classList.add('loading');
     try{
       const jobs = await fn();
@@ -841,6 +865,7 @@ function initSetup(){
   $('#wantSal').value = state.wants.sal || '';
   $('#wantLoc').value = state.wants.loc || '';
   $('#wantLvl').value = state.wants.lvl || '';
+  $('#serverUrl').value = state.server;
   updateSetupHints();
   if(!state.resume) $('#setupPanel').classList.add('open');
 }
@@ -860,9 +885,14 @@ $('#saveSetup').addEventListener('click', ()=>{
   };
   localStorage.setItem(LS.resume, state.resume);
   localStorage.setItem(LS.wants, JSON.stringify(state.wants));
+  const newServer = $('#serverUrl').value.trim();
+  const serverChanged = newServer !== state.server;
+  state.server = newServer;
+  localStorage.setItem(LS.server, state.server);
   rescoreAll(); render(); updateSetupHints();
   $('#saveMsg').textContent = '✓ saved & rescored';
   setTimeout(()=>$('#saveMsg').textContent='', 2500);
+  if(serverChanged) loadJobs();
 });
 
 $$('.panel-head').forEach(h=>h.addEventListener('click', ()=>{

@@ -1,0 +1,24 @@
+{
+  "interval_minutes": 30,
+  "export": {
+    "days_active": 14,
+    "max_desc_chars": 6000,
+    "max_jobs": 3000
+  },
+  "sources": {
+    "remotive": { "enabled": true, "limit": 600 },
+    "remoteok": { "enabled": true },
+    "arbeitnow": { "enabled": true, "pages": 3 },
+    "jobicy": { "enabled": true, "count": 100 },
+    "weworkremotely": { "enabled": true },
+    "hn_hiring": { "enabled": true },
+    "greenhouse": {
+      "enabled": true,
+      "boards": ["gitlab", "cloudflare"]
+    },
+    "lever": {
+      "enabled": true,
+      "boards": []
+    }
+  }
+}
