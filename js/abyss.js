@@ -19,7 +19,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: innerWidth > 480, powerPreference: 'high-performance' });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
 } catch (e) {
   renderer = null; // the flat page stays as it is
 }
@@ -33,7 +33,7 @@ function start() {
   renderer.setClearColor(C.crust);
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(C.crust, 0.028);
-  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 200);
+  const camera = new THREE.PerspectiveCamera(FOV, 1, 1, 120); // tight range: phone depth buffers are coarse
 
   scene.add(new THREE.HemisphereLight(C.blue, C.crust, 0.55));
   const key = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -46,6 +46,7 @@ function start() {
   // ---------- helpers ----------
   const solid = (color, ei = 0.35) => new THREE.MeshStandardMaterial({
     color, emissive: color, emissiveIntensity: ei, roughness: 0.45, metalness: 0.1, flatShading: true,
+    polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1, // keeps edge lines from fighting the faces under them
   });
   const lines = (geo, color, opacity = 0.9) => new THREE.LineSegments(
     new THREE.EdgesGeometry(geo),
@@ -270,7 +271,7 @@ function start() {
   let camZ = CAM_Z;
   function layout() {
     const w = innerWidth, h = innerHeight;
-    const dpr = Math.min(devicePixelRatio || 1, w < 760 ? 1.5 : 2);
+    const dpr = Math.min(devicePixelRatio || 1, 2);
     renderer.setPixelRatio(dpr);
     renderer.setSize(w, h, false);
     dustMat.uniforms.uScale.value = dpr * h / 900;
