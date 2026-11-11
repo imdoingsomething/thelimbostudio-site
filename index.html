@@ -5,296 +5,221 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>The Limbo Studio</title>
 <meta name="description" content="Independent technical exploration. Building things that are useful. Minneapolis, MN."/>
+<meta name="theme-color" content="#11111b"/>
+<meta property="og:title" content="The Limbo Studio"/>
+<meta property="og:description" content="Independent technical exploration. Building things that are useful. Minneapolis, MN."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://thelimbostudio.com/assets/logo.png"/>
+<link rel="icon" type="image/png" href="assets/logo.png"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<script type="importmap">
+{"imports":{"three":"./vendor/three/three.module.min.js","three/addons/loaders/SVGLoader.js":"./vendor/three/SVGLoader.js"}}
+</script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;width:100%;background:#1e1e2e;overflow:hidden}
+:root{
+  --crust:#11111b;--mantle:#181825;--base:#1e1e2e;--surface:#313244;
+  --overlay:#6c7086;--subtext:#a6adc8;--text:#cdd6f4;
+  --mauve:#cba6f7;--blue:#89b4fa;--sky:#89dceb;--teal:#94e2d5;
+  --green:#a6e3a1;--peach:#fab387;--pink:#f5c2e7;
+}
+*{box-sizing:border-box}
+html{background:var(--crust)}
 body{
-  display:flex;align-items:center;justify-content:center;
+  margin:0;background:var(--crust);color:var(--text);
   font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
-  font-size:14px;line-height:1.8;
-  color:#cdd6f4;
+  font-size:14px;line-height:1.75;font-weight:300;
+  -webkit-font-smoothing:antialiased;
 }
-#shell{
-  width:min(860px,100vw);
-  height:100vh;
-  padding:clamp(24px,4vw,64px) clamp(20px,4vw,56px);
-  display:flex;flex-direction:column;
-}
-#output{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  scrollbar-width:thin;scrollbar-color:#313244 transparent;
-}
-#output::-webkit-scrollbar{width:3px}
-#output::-webkit-scrollbar-thumb{background:#313244}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--mauve);outline-offset:3px;border-radius:4px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-.ln{display:block;white-space:pre-wrap;word-break:break-word;min-height:1.8em}
-.logo-row{display:block;min-height:0;margin-bottom:4px;padding-top:4px;}
+/* ---------- flat page: no WebGL, no JS, crawlers ---------- */
+#abyss{display:none}
+.masthead{text-align:center;padding:72px 16px 8px}
+.masthead img{width:220px;height:220px;max-width:60vw;height:auto}
+.tag{text-align:center;padding:0 16px 24px}
+.tag p{margin:0}
+.tag .line{font-size:16px;font-weight:400}
+.tag .sub{color:var(--overlay);font-size:12px;letter-spacing:.12em}
+.tag .hint{display:none}
+#labels{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;padding:0 16px 32px}
+#labels a{color:var(--subtext)}
+#labels i{display:none}
+main{max-width:1040px;margin:0 auto;padding:0 16px 80px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.entry{
+  --accent:var(--mauve);
+  background:var(--mantle);border:1px solid var(--surface);border-top:2px solid var(--accent);
+  border-radius:10px;padding:22px 22px 20px;
+}
+.entry h2{margin:0 0 2px;font-size:20px;font-weight:500;color:var(--accent);letter-spacing:.01em}
+.entry .status{margin:0 0 14px;font-size:12px;color:var(--overlay);letter-spacing:.08em;text-transform:uppercase}
+.entry .status::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:8px;vertical-align:1px}
+.entry p{margin:0 0 12px}
+.entry dl{margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:12.5px}
+.entry dt{color:var(--overlay)}
+.entry dd{margin:0;color:var(--subtext);overflow-wrap:anywhere}
+.entry .go{
+  display:inline-block;margin-top:16px;padding:7px 14px;border:1px solid var(--accent);border-radius:6px;
+  color:var(--accent);font-weight:400;
+}
+.entry .go:hover{background:var(--accent);color:var(--crust);text-decoration:none}
+.entry .x{display:none}
 
-/* catppuccin mocha token colors */
-.fg      { color:#cdd6f4 }   /* base text */
-.comment { color:#6c7086 }   /* overlay0 — comments */
-.subtext { color:#a6adc8 }   /* subtext1 */
-.purple  { color:#cba6f7 }   /* mauve — keywords */
-.teal    { color:#94e2d5 }   /* teal — strings / values */
-.green   { color:#a6e3a1 }   /* green — success */
-.blue    { color:#89b4fa }   /* blue — functions */
-.sky     { color:#89dceb }   /* sky — types */
-.peach   { color:#fab387 }   /* peach — constants */
-.red     { color:#f38ba8 }   /* red — errors */
-.yellow  { color:#f9e2af }   /* yellow — warnings */
-.bright  { color:#ffffff }   /* white */
+/* ---------- the abyss ---------- */
+.has-3d,.has-3d body{height:100%;overflow:hidden}
+.has-3d #abyss{display:block;position:fixed;inset:0;width:100%;height:100%;touch-action:none;outline:none}
+.has-3d body::after{ /* walls of the pit closing in */
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 46%,transparent 38%,rgba(8,8,14,.72) 100%);
+}
+.has-3d .masthead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);padding:0}
+.has-3d .tag{
+  position:fixed;left:0;right:0;bottom:max(22px,env(safe-area-inset-bottom));z-index:2;padding:0 16px;
+  pointer-events:none;transition:opacity .5s;
+}
+.has-3d .tag .line{font-size:15px;text-shadow:0 0 18px var(--crust)}
+.has-3d .tag .hint{display:block;margin-top:10px;color:var(--overlay);font-size:11px;letter-spacing:.14em;opacity:.75}
+.has-3d #labels{position:fixed;inset:0;display:block;padding:0;pointer-events:none;z-index:2}
+.has-3d #labels a{
+  position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;text-align:center;
+  color:var(--text);font-size:13px;font-weight:400;letter-spacing:.06em;line-height:1.35;
+  padding:6px 10px;will-change:transform,opacity;
+  text-shadow:0 0 10px var(--crust),0 0 4px var(--crust);
+  transition:color .2s;
+}
+.has-3d #labels a:hover,.has-3d #labels a.hot{color:var(--c);text-decoration:none}
+.has-3d #labels i{display:block;font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--c);opacity:.85}
+.has-3d main{display:block;max-width:none;padding:0;margin:0}
+.has-3d .entry{
+  position:fixed;z-index:3;right:max(4vw,24px);top:50%;width:min(440px,40vw);max-height:82vh;overflow:auto;
+  background:rgba(17,17,27,.74);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);border-top:2px solid var(--accent);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  padding:26px 26px 24px;
+  visibility:hidden;opacity:0;transform:translate(24px,-50%);
+  transition:opacity .45s .25s,transform .55s .25s cubic-bezier(.2,.7,.2,1),visibility 0s .7s;
+}
+.has-3d .entry.open{visibility:visible;opacity:1;transform:translate(0,-50%);transition-delay:.25s,.25s,0s}
+.has-3d .entry:focus{outline:none}
+.has-3d .entry .x{
+  display:block;position:absolute;top:10px;right:10px;width:36px;height:36px;border:0;border-radius:6px;
+  background:none;color:var(--overlay);font:inherit;font-size:18px;cursor:pointer;
+}
+.has-3d .entry .x:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.has-3d.is-open .tag{opacity:0}
 
-.prompt-row{
-  display:flex;align-items:center;
-  margin-top:8px;flex-shrink:0;
-  position:relative;
+@media (max-width:760px){
+  .has-3d .entry{
+    left:0;right:0;top:auto;bottom:0;width:auto;max-height:56vh;border-radius:16px 16px 0 0;
+    border-left:0;border-right:0;border-bottom:0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));
+    transform:translateY(30px);
+  }
+  .has-3d .entry.open{transform:none}
+  .has-3d #labels a{font-size:12px}
+  .has-3d .tag .hint{display:none}
+  .has-3d .tag .line{font-size:14px}
 }
-.sigil{color:#cba6f7;margin-right:6px;flex-shrink:0;user-select:none;font-weight:500}
-#inp{
-  background:transparent;border:none;outline:none;
-  font-family:inherit;font-size:14px;
-  color:#cdd6f4;flex:1;caret-color:#f5c2e7;min-width:0;
+@media (prefers-reduced-motion:reduce){
+  .has-3d .entry,.has-3d .entry.open{transition:none}
 }
-#caret{
-  width:2px;height:16px;background:#f5c2e7;
-  display:inline-block;vertical-align:middle;
-  animation:blink 1.2s step-end infinite;
-  flex-shrink:0;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-#ac{
-  display:none;position:absolute;
-  bottom:calc(100% + 4px);left:22px;
-  background:#181825;
-  border:1px solid #313244;
-  border-radius:4px;z-index:10;
-  min-width:260px;overflow:hidden;
-  box-shadow:0 8px 24px rgba(0,0,0,0.5);
-}
-.aci{
-  padding:5px 14px;font-size:13px;cursor:pointer;
-  color:#cdd6f4;display:flex;align-items:center;gap:0;
-}
-.aci:hover,.aci.sel{background:#313244}
-.aci .aslash{color:#cba6f7;margin-right:2px}
-.aci .acmd{color:#89b4fa}
-.aci .adesc{color:#6c7086;font-size:11px;margin-left:auto;padding-left:16px}
 </style>
 </head>
 <body>
-<div id="shell">
-  <div id="output"></div>
-  <div class="prompt-row">
-    <span class="sigil">λ</span>
-    <input id="inp" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-    <span id="caret"></span>
-    <div id="ac"></div>
-  </div>
+<canvas id="abyss" aria-hidden="true"></canvas>
+
+<header class="masthead">
+  <h1 class="vh">The Limbo Studio</h1>
+  <img src="assets/logo.png" alt="" width="400" height="400"/>
+</header>
+
+<div class="tag">
+  <p class="line">Building things that are useful.</p>
+  <p class="sub">minneapolis &nbsp;·&nbsp; independent &nbsp;·&nbsp; 2026</p>
+  <p class="hint" aria-hidden="true">select an object &nbsp;·&nbsp; esc to drift back</p>
 </div>
-<script>
-const O=document.getElementById('output');
-const I=document.getElementById('inp');
-const AC=document.getElementById('ac');
 
-const CMDS=[
-  {c:'projects', d:'active work'},
-  {c:'about',    d:'who we are'},
-  {c:'contact',  d:'reach out'},
-  {c:'stance',   d:'open stanceapp.org'},
-  {c:'formwell', d:'open formwell.thelimbostudio.com'},
-  {c:'jobs',     d:'open jobscout — job finder'},
-  {c:'github',   d:'open github'},
-  {c:'clear',    d:'clear buffer'},
-  {c:'help',     d:'show commands'},
-];
+<nav id="labels" aria-label="Sections">
+  <a href="#stance" style="--c:var(--mauve)">stance<i>live</i></a>
+  <a href="#discipline" style="--c:var(--peach)">discipline<i>in build</i></a>
+  <a href="#greyduck" style="--c:var(--sky)">grey duck<i>not public</i></a>
+  <a href="#formwell" style="--c:var(--green)">formwell<i>live</i></a>
+  <a href="#about" style="--c:var(--blue)">about<i>who we are</i></a>
+  <a href="#contact" style="--c:var(--pink)">contact<i>reach out</i></a>
+  <a href="#jobscout" style="--c:var(--teal)">jobscout<i>job finder</i></a>
+</nav>
 
-// each line: [colorClass, text]
-const PAGES={
-  help:[
-    ['purple','-- commands -----------------------------------------------'],
-    ['fg',''],
-    ['blue',  '  /projects   '],['comment','active work'],
-    ['blue',  '  /about      '],['comment','who we are'],
-    ['blue',  '  /contact    '],['comment','reach out'],
-    ['blue',  '  /stance     '],['comment','open stanceapp.org'],
-    ['blue',  '  /formwell   '],['comment','open formwell.thelimbostudio.com'],
-    ['blue',  '  /jobs       '],['comment','open jobscout — job finder'],
-    ['blue',  '  /github     '],['comment','open github'],
-    ['blue',  '  /clear      '],['comment','clear the buffer'],
-    ['fg',''],
-    ['comment','-- tab to autocomplete, enter to run -----------------------'],
-  ],
-  projects:[
-    ['purple','-- projects ------------------------------------------------'],
-    ['fg',''],
-    ['peach', 'stance'],
-    ['fg',    'a web platform for structured argument annotation. users paste or'],
-    ['fg',    'link a source, select passages, tag fallacy types, and write'],
-    ['fg',    'counter-positions. each analysis produces a shareable artifact.'],
-    ['fg',    'ai scores submissions via user-supplied api keys.'],
-    ['comment','stack: fastapi · sqlite/postgres · react + vite · playwright'],
-    ['comment','       docker compose · caddy · ollama (local inference)'],
-    ['green', 'status: live   →   stanceapp.org'],
-    ['fg',''],
-    ['peach', 'discipline'],
-    ['fg',    'a modular ux framework for ai-assisted coding targeting senior'],
-    ['fg',    'engineers. replaces the chat+diff panel model with intent-first'],
-    ['fg',    'workspaces, a temporal causality view of ai reasoning, and a'],
-    ['fg',    'confidence topology layer showing where the model is guessing.'],
-    ['comment','stack: open spec + plugin api · community workspace registry'],
-    ['comment','       designed to wrap existing editors (neovim, vscode, zed)'],
-    ['blue',  'status: in build'],
-    ['fg',''],
-    ['peach', 'grey duck'],
-    ['fg',    'a private group communication system for closed organizations.'],
-    ['fg',    'non-federated — no external server connections, no data leaving'],
-    ['fg',    'the host. built on matrix/synapse with federation disabled.'],
-    ['fg',    'end-to-end encrypted rooms, invite-only, self-administered.'],
-    ['comment','stack: matrix/synapse · self-hosted on hetzner · njalla domains'],
-    ['comment','       federation disabled · e2ee · no commercial dependency'],
-    ['sky',   'status: active   not public yet'],
-    ['fg',''],
-    ['peach', 'formwell'],
-    ['fg',    'a desktop application for clinical report writing in psychology'],
-    ['fg',    'practices. replaces fragmented template workflows with structured'],
-    ['fg',    'report generation, cutting documentation time for psychologists.'],
-    ['fg',    'one-time purchase — no subscription, no cloud dependency.'],
-    ['comment','stack: electron · react · typescript · vite'],
-    ['comment','       one-time license · offline-first · mac + windows'],
-    ['green', 'status: live   →   formwell.thelimbostudio.com'],
-  ],
-  about:[
-    ['purple','-- about ---------------------------------------------------'],
-    ['fg',''],
-    ['fg',    'technical exploration with a systems improvement background.'],
-    ['fg',    'focused on novel implementations of existing services and'],
-    ['fg',    'platforms — finding the non-obvious use of what already exists.'],
-    ['fg',''],
-    ['fg',    'some of it is serious. some of it is just messing around.'],
-    ['fg',''],
-    ['comment','location        minneapolis, mn'],
-    ['comment','infrastructure  self-hosted / hetzner dedicated'],
-    ['comment','open to         collaboration, research, press'],
-  ],
-  contact:[
-    ['purple','-- contact -------------------------------------------------'],
-    ['fg',''],
-    ['fg',    'if the work resonates, reach out.'],
-    ['fg',''],
-    ['comment','email   contact@thelimbostudio.com'],
-    ['comment','github  github.com/imdoingsomething'],
-    ['comment','stance  stanceapp.org'],
-  ],
-};
+<main>
+  <section class="entry" id="stance" tabindex="-1" style="--accent:var(--mauve)">
+    <h2>stance</h2>
+    <p class="status">live</p>
+    <p>a web platform for structured argument annotation. users paste or link a source, select passages, tag fallacy types, and write counter-positions. each analysis produces a shareable artifact. ai scores submissions via user-supplied api keys.</p>
+    <dl>
+      <dt>stack</dt><dd>fastapi · sqlite/postgres · react + vite · playwright · docker compose · caddy · ollama (local inference)</dd>
+    </dl>
+    <a class="go" href="https://stanceapp.org" target="_blank" rel="noopener">stanceapp.org →</a>
+  </section>
 
-let inlineNext=false;
+  <section class="entry" id="discipline" tabindex="-1" style="--accent:var(--peach)">
+    <h2>discipline</h2>
+    <p class="status">in build</p>
+    <p>a modular ux framework for ai-assisted coding targeting senior engineers. replaces the chat+diff panel model with intent-first workspaces, a temporal causality view of ai reasoning, and a confidence topology layer showing where the model is guessing.</p>
+    <dl>
+      <dt>stack</dt><dd>open spec + plugin api · community workspace registry · designed to wrap existing editors (neovim, vscode, zed)</dd>
+    </dl>
+  </section>
 
-function line(cls,txt){
-  if(inlineNext){
-    const last=O.lastElementChild;
-    if(last){const s=document.createElement('span');s.className=cls;s.textContent=txt;last.appendChild(s);O.scrollTop=O.scrollHeight;inlineNext=false;return last;}
-  }
-  const el=document.createElement('div');
-  el.className='ln';
-  const s=document.createElement('span');s.className=cls;s.textContent=txt;
-  el.appendChild(s);O.appendChild(el);O.scrollTop=O.scrollHeight;
-  return el;
-}
+  <section class="entry" id="greyduck" tabindex="-1" style="--accent:var(--sky)">
+    <h2>grey duck</h2>
+    <p class="status">active · not public yet</p>
+    <p>a private group communication system for closed organizations. non-federated — no external server connections, no data leaving the host. built on matrix/synapse with federation disabled. end-to-end encrypted rooms, invite-only, self-administered.</p>
+    <dl>
+      <dt>stack</dt><dd>matrix/synapse · self-hosted on hetzner · njalla domains · federation disabled · e2ee · no commercial dependency</dd>
+    </dl>
+  </section>
 
-function blank(){line('fg','');}
+  <section class="entry" id="formwell" tabindex="-1" style="--accent:var(--green)">
+    <h2>formwell</h2>
+    <p class="status">live</p>
+    <p>a desktop application for clinical report writing in psychology practices. replaces fragmented template workflows with structured report generation, cutting documentation time for psychologists. one-time purchase — no subscription, no cloud dependency.</p>
+    <dl>
+      <dt>stack</dt><dd>electron · react · typescript · vite · one-time license · offline-first · mac + windows</dd>
+    </dl>
+    <a class="go" href="https://formwell.thelimbostudio.com" target="_blank" rel="noopener">formwell.thelimbostudio.com →</a>
+  </section>
 
-function typeLines(pairs,done){
-  let i=0;
-  function next(){
-    if(i>=pairs.length){if(done)done();return;}
-    const [cls,txt]=pairs[i++];
-    line(cls,txt);
-    setTimeout(next, txt===''?20:30);
-  }
-  next();
-}
+  <section class="entry" id="about" tabindex="-1" style="--accent:var(--blue)">
+    <h2>about</h2>
+    <p class="status">the limbo studio</p>
+    <p>technical exploration with a systems improvement background. focused on novel implementations of existing services and platforms — finding the non-obvious use of what already exists.</p>
+    <p>some of it is serious. some of it is just messing around.</p>
+    <dl>
+      <dt>location</dt><dd>minneapolis, mn</dd>
+      <dt>infrastructure</dt><dd>self-hosted / hetzner dedicated</dd>
+      <dt>open to</dt><dd>collaboration, research, press</dd>
+    </dl>
+  </section>
 
-function renderPage(pairs){
-  blank();
-  typeLines(pairs);
-}
+  <section class="entry" id="contact" tabindex="-1" style="--accent:var(--pink)">
+    <h2>contact</h2>
+    <p class="status">reach out</p>
+    <p>if the work resonates, reach out.</p>
+    <dl>
+      <dt>email</dt><dd><a href="mailto:contact@thelimbostudio.com">contact@thelimbostudio.com</a></dd>
+      <dt>github</dt><dd><a href="https://github.com/imdoingsomething" target="_blank" rel="noopener">github.com/imdoingsomething</a></dd>
+      <dt>stance</dt><dd><a href="https://stanceapp.org" target="_blank" rel="noopener">stanceapp.org</a></dd>
+    </dl>
+  </section>
 
-function execCmd(raw){
-  const cmd=raw.trim().replace(/^\//,'').toLowerCase();
-  if(!cmd)return;
-  const el=document.createElement('div');el.className='ln';
-  const sig=document.createElement('span');sig.className='sigil';sig.textContent='λ ';
-  const tx=document.createElement('span');tx.className='purple';tx.textContent=(raw.startsWith('/')?raw:'/'+cmd);
-  el.appendChild(sig);el.appendChild(tx);O.appendChild(el);O.scrollTop=O.scrollHeight;
+  <section class="entry" id="jobscout" tabindex="-1" style="--accent:var(--teal)">
+    <h2>jobscout</h2>
+    <p class="status">job finder</p>
+    <p>live job aggregator with resume matching and one-click resume tailoring. runs entirely in your browser.</p>
+    <a class="go" href="jobscout/">open jobscout →</a>
+  </section>
+</main>
 
-  if(cmd==='clear'){O.innerHTML='';return;}
-  if(cmd==='stance'){blank();line('green','opening stanceapp.org...');setTimeout(()=>window.open('https://stanceapp.org','_blank'),300);return;}
-  if(cmd==='formwell'){blank();line('green','opening formwell.thelimbostudio.com...');setTimeout(()=>window.open('https://formwell.thelimbostudio.com','_blank'),300);return;}
-  if(cmd==='jobs'){blank();line('green','opening jobscout...');setTimeout(()=>window.open('/jobscout/','_blank'),300);return;}
-  if(cmd==='github'){blank();line('green','opening github.com/imdoingsomething...');setTimeout(()=>window.open('https://github.com/imdoingsomething','_blank'),300);return;}
-  if(PAGES[cmd]){renderPage(PAGES[cmd]);return;}
-  blank();
-  line('red','E: unknown command: /'+cmd);
-  line('comment','type /help for available commands');
-}
-
-// autocomplete
-let acIdx=-1,acList=[];
-function drawAC(val){
-  if(!val.startsWith('/')){AC.style.display='none';acIdx=-1;return;}
-  const q=val.slice(1).toLowerCase();
-  acList=CMDS.filter(x=>x.c.startsWith(q));
-  if(!acList.length){AC.style.display='none';acIdx=-1;return;}
-  AC.innerHTML=acList.map((x,i)=>`<div class="aci${i===acIdx?' sel':''}" data-i="${i}"><span class="aslash">/</span><span class="acmd">${x.c}</span><span class="adesc">${x.d}</span></div>`).join('');
-  AC.style.display='block';
-  AC.querySelectorAll('.aci').forEach(el=>el.addEventListener('mousedown',e=>{
-    e.preventDefault();I.value='/'+acList[+el.dataset.i].c;AC.style.display='none';I.focus();
-  }));
-}
-
-I.addEventListener('input',()=>{acIdx=-1;drawAC(I.value);});
-I.addEventListener('keydown',e=>{
-  if(AC.style.display!=='none'){
-    if(e.key==='ArrowDown'){e.preventDefault();acIdx=Math.min(acIdx+1,acList.length-1);drawAC(I.value);return;}
-    if(e.key==='ArrowUp'){e.preventDefault();acIdx=Math.max(acIdx-1,0);drawAC(I.value);return;}
-    if(e.key==='Tab'){e.preventDefault();const p=acList[acIdx>=0?acIdx:0];if(p){I.value='/'+p.c;AC.style.display='none';}return;}
-    if(e.key==='Escape'){AC.style.display='none';acIdx=-1;return;}
-  }
-  if(e.key==='Enter'){const v=I.value.trim();I.value='';AC.style.display='none';acIdx=-1;if(v)execCmd(v);}
-});
-document.addEventListener('click',()=>I.focus());
-
-// boot — logo first, then text sequence
-function boot(){
-  const logoRow=document.createElement('div');
-  logoRow.className='logo-row';
-  const img=document.createElement('img');
-  img.src='/assets/logo.png';
-  img.alt='The Limbo Studio';
-  img.style.cssText='width:72px;height:72px;display:block;opacity:0.92;image-rendering:crisp-edges;';
-  logoRow.appendChild(img);
-  O.appendChild(logoRow);
-
-  const BOOT=[
-    ['comment','-- limbo-studio v1.0.0 (2026-03-22) -----------------------'],
-    ['fg',''],
-    ['bright', 'THE LIMBO STUDIO'],
-    ['comment','minneapolis  ·  independent  ·  2026'],
-    ['fg',''],
-    ['teal',   'Building things that are useful.'],
-    ['fg',''],
-    ['subtext','type / to navigate'],
-    ['comment','press tab to autocomplete   /help for all commands'],
-    ['fg',''],
-    ['comment','------------------------------------------------------------'],
-    ['fg',''],
-  ];
-  typeLines(BOOT,()=>I.focus());
-}
-
-boot();
-</script>
+<script type="module" src="js/abyss.js"></script>
 </body>
 </html>
